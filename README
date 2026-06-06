@@ -1,0 +1,204 @@
+		ClearVision
+
+DEFINITIONS:
+
+	(a). 'ClearVision' means the ClearVision software project, including all source code, documentation, assets, and related materials contained within its codebase.
+
+	(b). 'grep' and 'ripgrep' mean the respective text-search utilities known by those names and are referenced solely for comparison, compatibility, or explanatory purposes.
+
+	(c). 'User' means any individual or entity that downloads, executes, studies, modifies, distributes, or otherwise interacts with ClearVision.
+
+	(d). 'Release' means any published version of ClearVision identified by a version number, tag, commit, or distribution package.
+
+
+ClearVision is a fast, modern, recursive search utility written entirely in C.
+It is inspired by grep and ripgrep while exploring alternative approaches to searching, indexing, project exploration, and developer workflows.
+The project prioritizes performance, simplicity, maintainability, and developer experience.
+
+Inspired by tools such as grep and ripgrep, ClearVision is primarily focused on performance, simplicity, and efficiency.
+grep and ripgrep are both excellent search utilities that have proven themselves across countless workflows and codebases.
+ClearVision is not intended to replace them, but rather to explore alternative approaches to recursive searching, indexing,
+and result presentation while remaining lightweight and easy to use.
+
+The goal of ClearVision is to provide a fast and intuitive search experience for files, directories, and large projects,
+while maintaining the simplicity that makes command-line search tools so valuable.
+
+
+FEATURES:
+
+	(1). Recursive directory search.
+
+	(2). Single file search.
+
+	(3). Multiple file search.
+
+	(4). Literal string searching.
+
+	(5). Regular expression searching (PCRE2).
+
+	(6). Fuzzy searching.
+
+	(7). Multi-pattern search.
+
+	(8). Case-sensitive and case-insensitive modes.
+
+	(9). Whole-word matching.
+
+	(10). Exact-match mode.
+
+	(11). Match counting.
+
+	(12). Context lines before, after, and around matches.
+
+	(13). Include glob patterns.
+
+	(14). Exclude glob patterns.
+
+	(15). Hidden file control.
+
+	(16). Symlink control.
+
+	(17). Binary file detection and filtering.
+
+	(18). Extension filtering.
+
+	(19). Maximum file size filtering.
+
+	(20). Respect .gitignore.
+
+	(21). Search tracked files.
+
+	(22). Search modified files.
+
+	(23). Search untracked files.
+
+	(24). Standard terminal output.
+
+	(25). Colored output.
+
+	(26). JSON output.
+
+	(27). Tree output.
+
+	(28). Statistics output.
+
+	(29). SQLite-backed indexing.
+
+	(30). Incremental indexing.
+
+	(31). Metadata tracking.
+
+	(32). Indexed searching.
+
+	(33). Index rebuild command.
+
+	(34). Index removal command.
+
+	(35). Multi-threaded operation with configurable thread pool.
+
+	(36). Memory-mapped file support.
+
+	(37). Efficient memory usage.
+
+	(38). Optimized for large repositories.
+
+	(39). Minimal allocations and copies.
+
+	(40). ncurses-based terminal UI.
+
+	(41). Live search.
+
+	(42). Result navigation.
+
+	(43). File preview.
+
+	(44). Real-time filtering.
+
+	(45). Editor launching.
+
+
+INSTALLATION:
+
+ClearVision uses Just as its build orchestration tool. Ensure you have the following dependencies installed:
+
+	- clang (or gcc)
+	- pkg-config
+	- sqlite3
+	- pcre2
+	- ncurses
+	- pthreads
+
+BUILD COMMANDS:
+
+	just build
+	just release
+	just clean
+	just install
+	just uninstall
+
+
+NIX:
+
+ClearVision provides a Nix flake for reproducible development and builds:
+
+	nix develop
+	nix build
+	nix run
+
+
+USAGE:
+
+BASIC SEARCH:
+
+	cv search "pattern"
+	cv regex "pattern"
+	cv fuzzy "pattern"
+
+SEARCH OPTIONS:
+
+	cv search "pattern" -i
+	cv search "pattern" -w
+	cv search "pattern" -c
+	cv search "pattern" -A 3
+	cv search "pattern" -B 3
+	cv search "pattern" -C 3
+	cv search "pattern" -j 8
+
+FILE FILTERING:
+
+	cv search "pattern" --hidden
+	cv search "pattern" --follow
+	cv search "pattern" --include "*.c"
+	cv search "pattern" --exclude "*.o"
+	cv search "pattern" --max-size 1048576
+
+OUTPUT FORMATS:
+
+	cv search "pattern" --json
+	cv search "pattern" --tree
+	cv search "pattern" --stats
+
+INDEXING:
+
+	cv index /path/to/project
+	cv rebuild
+	cv remove-index
+	cv stats
+
+INTERACTIVE INTERFACE:
+
+	cv tui
+
+OTHER COMMANDS:
+
+	cv version
+	cv help
+
+
+CONFIGURATION:
+
+ClearVision uses the following filesystem paths:
+
+	- Configuration: ~/.config/clearvision
+	- Cache: ~/.cache/clearvision
+	- Data: ~/.local/share/clearvision
