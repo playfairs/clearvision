@@ -88,7 +88,7 @@ OUTPUT FORMATS:
 
 INDEXING:
 
-	cv index /path/to/project
+	cv index <path>
 	cv rebuild
 	cv remove-index
 	cv stats
