@@ -114,14 +114,8 @@ int cv_config_parse(int argc, char** argv, cv_config_t* config) {
     }
 
     const char* first_arg = argv[1];
-    
-    if (strcmp(first_arg, "search") == 0) {
-        config->command = CV_COMMAND_SEARCH;
-    } else if (strcmp(first_arg, "regex") == 0) {
-        config->command = CV_COMMAND_REGEX;
-    } else if (strcmp(first_arg, "fuzzy") == 0) {
-        config->command = CV_COMMAND_FUZZY;
-    } else if (strcmp(first_arg, "index") == 0) {
+
+    if (strcmp(first_arg, "index") == 0) {
         config->command = CV_COMMAND_INDEX;
     } else if (strcmp(first_arg, "rebuild") == 0) {
         config->command = CV_COMMAND_REBUILD;
@@ -135,9 +129,17 @@ int cv_config_parse(int argc, char** argv, cv_config_t* config) {
         config->command = CV_COMMAND_VERSION;
     } else if (strcmp(first_arg, "help") == 0) {
         config->command = CV_COMMAND_HELP;
-    } else if (is_flag(first_arg)) {
+    } else if (strcmp(first_arg, "regex") == 0) {
         config->command = CV_COMMAND_SEARCH;
         config->pattern = cv_strdup(first_arg);
+    } else if (strcmp(first_arg, "fuzzy") == 0) {
+        config->command = CV_COMMAND_SEARCH;
+        config->pattern = cv_strdup(first_arg);
+    } else if (strcmp(first_arg, "search") == 0) {
+        config->command = CV_COMMAND_SEARCH;
+        config->pattern = cv_strdup(first_arg);
+    } else if (is_flag(first_arg)) {
+        config->command = CV_COMMAND_SEARCH;
     } else {
         config->command = CV_COMMAND_SEARCH;
         config->pattern = cv_strdup(first_arg);
@@ -145,7 +147,7 @@ int cv_config_parse(int argc, char** argv, cv_config_t* config) {
 
     for (int i = 2; i < argc; i++) {
         const char* arg = argv[i];
-        
+
         if (is_flag(arg)) {
             if (arg[1] == '-') {
                 if (!parse_long_flag(arg, config)) {
@@ -221,8 +223,10 @@ void cv_print_help(void) {
     printf("  --include <glob>    Include files matching pattern\n");
     printf("  --exclude <glob>    Exclude files matching pattern\n");
     printf("  --max-size <bytes>  Maximum file size\n");
+    fflush(stdout);
 }
 
 void cv_print_version(void) {
     printf("ClearVision 0.1.0\n");
+    fflush(stdout);
 }

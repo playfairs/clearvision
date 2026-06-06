@@ -16,60 +16,65 @@ static int run_search(cv_config_t* config) {
         return -1;
     }
 
-    cv_search_options_t* search_options = cv_search_options_create();
-    search_options->pattern = cv_strdup(config->pattern);
-    search_options->case_insensitive = config->case_insensitive;
-    search_options->whole_word = config->whole_word;
-    search_options->context_before = config->context_before;
-    search_options->context_after = config->context_after;
-    search_options->threads = config->threads;
+    char cmd[4096];
+    size_t cmd_len = 0;
 
-    switch (config->command) {
-        case CV_COMMAND_SEARCH:
-            search_options->type = CV_SEARCH_LITERAL;
-            break;
-        case CV_COMMAND_REGEX:
-            search_options->type = CV_SEARCH_REGEX;
-            break;
-        case CV_COMMAND_FUZZY:
-            search_options->type = CV_SEARCH_FUZZY;
-            break;
-        default:
-            search_options->type = CV_SEARCH_LITERAL;
-            break;
+    cmd_len += snprintf(cmd + cmd_len, sizeof(cmd) - cmd_len, "rg");
+
+    if (config->case_insensitive) {
+        cmd_len += snprintf(cmd + cmd_len, sizeof(cmd) - cmd_len, " -i");
     }
 
-    cv_search_result_t* result = cv_search_result_create();
+    if (config->whole_word) {
+        cmd_len += snprintf(cmd + cmd_len, sizeof(cmd) - cmd_len, " -w");
+    }
 
-    cv_fs_options_t* fs_options = cv_fs_options_create();
-    fs_options->hidden_files = config->hidden_files;
-    fs_options->follow_symlinks = config->follow_symlinks;
-    fs_options->max_size = config->max_size;
+    if (config->context_before > 0) {
+        cmd_len += snprintf(cmd + cmd_len, sizeof(cmd) - cmd_len, " -B %d", config->context_before);
+    }
+
+    if (config->context_after > 0) {
+        cmd_len += snprintf(cmd + cmd_len, sizeof(cmd) - cmd_len, " -A %d", config->context_after);
+    }
+
+    if (config->context_around > 0) {
+        cmd_len += snprintf(cmd + cmd_len, sizeof(cmd) - cmd_len, " -C %d", config->context_around);
+    }
+
+    if (config->hidden_files) {
+        cmd_len += snprintf(cmd + cmd_len, sizeof(cmd) - cmd_len, " --hidden");
+    }
+
+    if (config->follow_symlinks) {
+        cmd_len += snprintf(cmd + cmd_len, sizeof(cmd) - cmd_len, " --follow");
+    }
+
+    cmd_len += snprintf(cmd + cmd_len, sizeof(cmd) - cmd_len, " --line-number --color ansi --heading");
+
+    cmd_len += snprintf(cmd + cmd_len, sizeof(cmd) - cmd_len, " %s", config->pattern);
 
     for (size_t i = 0; i < config->path_count; i++) {
-        cv_fs_traverse(config->paths[i], fs_options, NULL, NULL);
+        cmd_len += snprintf(cmd + cmd_len, sizeof(cmd) - cmd_len, " %s", config->paths[i]);
     }
 
-    for (size_t i = 0; i < config->path_count; i++) {
-        cv_search_file(config->paths[i], search_options, result);
+    FILE* pipe = popen(cmd, "r");
+    if (!pipe) {
+        fprintf(stderr, "Error: Failed to execute ripgrep. Is ripgrep installed?\n");
+        fflush(stderr);
+        return -1;
     }
 
-    cv_output_format_t format = CV_OUTPUT_TERMINAL;
-    if (config->json_output) {
-        format = CV_OUTPUT_JSON;
-    } else if (config->tree_output) {
-        format = CV_OUTPUT_TREE;
+    char buffer[8192];
+    while (fgets(buffer, sizeof(buffer), pipe)) {
+        printf("%s", buffer);
+        fflush(stdout);
     }
 
-    cv_output_print_results(result, format);
-
-    if (config->stats_output) {
-        cv_output_print_stats(result, 0);
+    int status = pclose(pipe);
+    if (status != 0) {
+        fprintf(stderr, "Error: ripgrep exited with status %d\n", status);
+        fflush(stderr);
     }
-
-    cv_search_options_destroy(search_options);
-    cv_search_result_destroy(result);
-    cv_fs_options_destroy(fs_options);
 
     return 0;
 }

@@ -52,22 +52,25 @@ void cv_output_print_match(cv_match_t* match, cv_output_format_t format) {
                    color_yellow(), match->column, color_reset(),
                    color_bold());
             printf("%s%s%s\n", match->line_content, color_reset(), "");
-            
+
             for (size_t i = 0; i < match->context_before_count; i++) {
                 printf("%s%s\n", color_reset(), match->context_before[i]);
             }
             for (size_t i = 0; i < match->context_after_count; i++) {
                 printf("%s%s\n", color_reset(), match->context_after[i]);
             }
+            fflush(stdout);
             break;
 
         case CV_OUTPUT_JSON:
             printf("{\"file\":\"%s\",\"line\":%zu,\"column\":%zu,\"content\":\"%s\"}\n",
                    match->file_path, match->line_number, match->column, match->line_content);
+            fflush(stdout);
             break;
 
         case CV_OUTPUT_TREE:
             printf("├── %s:%zu\n", match->file_path, match->line_number);
+            fflush(stdout);
             break;
 
         case CV_OUTPUT_STATS:
@@ -94,6 +97,7 @@ void cv_output_print_results(cv_search_result_t* result, cv_output_format_t form
             cv_output_print_match(&result->matches[i], format);
         }
     }
+    fflush(stdout);
 }
 
 void cv_output_print_stats(cv_search_result_t* result, uint64_t duration_ms) {
@@ -105,4 +109,5 @@ void cv_output_print_stats(cv_search_result_t* result, uint64_t duration_ms) {
     printf("  Matches: %s%zu%s\n", color_green(), result->total_matches, color_reset());
     printf("  Files: %s%zu%s\n", color_blue(), result->file_count, color_reset());
     printf("  Duration: %s%llu%sms\n", color_yellow(), (unsigned long long)duration_ms, color_reset());
+    fflush(stdout);
 }
