@@ -11,19 +11,16 @@ DEFINITIONS:
 
 	(d). 'Release' means any published version of ClearVision identified by a version number, tag, commit, or distribution package.
 
+ClearVision is a fast, modern recursive search utility written in C that builds upon the proven search capabilities of Ripgrep.
 
-ClearVision is a fast, modern, recursive search utility written entirely in C.
-It is inspired by grep and ripgrep while exploring alternative approaches to searching, indexing, project exploration, and developer workflows.
-The project prioritizes performance, simplicity, maintainability, and developer experience.
+Rather than implementing a search engine from scratch, ClearVision uses Ripgrep as its search backend while providing
+additional functionality focused on project exploration, indexing, workflow improvements, and developer experience.
 
-Inspired by tools such as grep and ripgrep, ClearVision is primarily focused on performance, simplicity, and efficiency.
-grep and ripgrep are both excellent search utilities that have proven themselves across countless workflows and codebases.
-ClearVision is not intended to replace them, but rather to explore alternative approaches to recursive searching, indexing,
-and result presentation while remaining lightweight and easy to use.
+The project is inspired by tools such as grep and ripgrep and is designed to complement them rather than replace them. ClearVision leverages Ripgrep's performance and mature search capabilities while exploring alternative approaches to result presentation, project navigation, indexing, configuration management, and search workflows.
 
-The goal of ClearVision is to provide a fast and intuitive search experience for files, directories, and large projects,
-while maintaining the simplicity that makes command-line search tools so valuable.
+The primary goal of ClearVision is to provide a streamlined and intuitive interface for searching files, directories, and large codebases while maintaining the speed, simplicity, and reliability developers expect from modern command-line tools.
 
+By combining Ripgrep's search engine with additional tooling and workflow enhancements, ClearVision aims to offer a practical and efficient experience for developers working with large projects and complex repositories.
 
 INSTALLATION:
 
